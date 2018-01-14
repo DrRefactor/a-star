@@ -4,7 +4,7 @@ const FROM = 0
 const TO = 1
 const WEIGHT = 2
 
-function lines2graph(lines) {
+function lines2graph(lines, raw = true) {
   let graph = new Graph()
   const start = lines[0][0]
   const target = lines[1][0]
@@ -21,8 +21,10 @@ function lines2graph(lines) {
     graph.addEdge(line[FROM], line[TO], line[WEIGHT])
   })
 
-  graph.applyLayers()
-  graph.sortEdges()
+  if (!raw) {
+    graph.applyLayers()
+    graph.sortEdges()
+  }
 
   return graph
 }

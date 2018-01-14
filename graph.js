@@ -64,10 +64,10 @@ class Graph {
       for (let edge of node.input
         .filter(_e => !visited.some(v => _e.from === v))
       ) {
-        _setLayer.call(this, this.nodes[edge.from], layer + 1)
+        _setLayer.call(this, this.nodes[edge.from], layer + 1, visited)
       }
     }
-    _setLayer.call(this, this.getTargetNode(), 0)
+    _setLayer.call(this, this.getTargetNode(), 0, [])
   }
 
   sortEdges(comparer = _defaultEdgeComparer) {

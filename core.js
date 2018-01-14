@@ -1,4 +1,6 @@
-function a_star(graph, h = (node) => _estimatedCost(node, graph)) {
+function a_star(graph, h = () => 0 ) {
+  // functional dependency injection
+  const _h = (node) => h(node, graph)
   let { start, target } = graph
 
   start = graph.nodes[start]
@@ -12,7 +14,7 @@ function a_star(graph, h = (node) => _estimatedCost(node, graph)) {
   gScore[start.id] = 0
 
   let fScore = {}
-  fScore[start.id] = h(start)
+  fScore[start.id] = _h(start)
 
   while(openSet.length) {
     let current = openSet.reduce((r, x) => {
@@ -46,7 +48,7 @@ function a_star(graph, h = (node) => _estimatedCost(node, graph)) {
 
       cameFrom[outNode.id] = current.id
       gScore[outNode.id] = tentativeGScore
-      fScore[outNode.id] = gScore[outNode.id] + h(outNode)
+      fScore[outNode.id] = gScore[outNode.id] + _h(outNode)
     }
   }
 
@@ -62,9 +64,11 @@ function _reconstructPath(cameFrom, currentId) {
   return path
 }
 
-function _estimatedCost(node, graph) {
+function estimatedCost(node, graph) {
   const minWeight = graph.edges[0].weight
   return minWeight * node.layer
 }
 
-module.exports = { a_star }
+const cheapestOutput = (node) => node.output.reduce((r, x) => r == null || x.weight < r ? x.weight : r, null) || 0
+
+module.exports = { a_star, cheapestOutput, estimatedCost }
