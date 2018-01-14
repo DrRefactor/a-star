@@ -66,6 +66,10 @@ function _reconstructPath(cameFrom, currentId) {
 
 function estimatedCost(node, graph) {
   const minWeight = graph.edges[0].weight
+  // possible optimalization:
+  // return graph.edges.slice(node.layer).reduce((r, x) => r + x.weight, 0)
+  // it's quite complex operation to perform many times though, might significally decrease time for some cases
+  // but for other it would increase, especially many edges with the same (or ~close) lowest cost
   return minWeight * node.layer
 }
 
